@@ -8,6 +8,7 @@
 \*\*.*       {}
 \{[^\}]*\}   {}
 \{[^\}]*     {printf("syntax error");}
+\}(.|\n)*    {printf("syntax error");}
 .|\n         {printf(yytext);}
 
 %%
