@@ -7,6 +7,7 @@
 \"(.|\n)*\"  {printf(yytext);}
 \*\*.*       {}
 \{[^\}]*\}   {}
+\{[^\}]*     {printf("syntax error");}
 .|\n         {printf(yytext);}
 
 %%
