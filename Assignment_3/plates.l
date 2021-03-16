@@ -1,0 +1,20 @@
+%{
+%}
+COUNTY14 C|CE|CN|CW|D|DL|G|KE|KK|KY|L|LD|LH|LM|LS|MH|MN|MO|OY|RN|SO|T|W|WH|WX|WW
+COUNTY87 C|CE|CN|CW|D|DL|G|KE|KK|KY|L|LK|LD|LH|LM|LS|MH|MN|MO|OY|RN|SO|TN|TS|W|WD|WH|WX|WW
+YEAR14 [0-9][0-9](1|2)
+YEAR87 [0-9][0-9]
+NUMBER [1-9][0-9]{0,5}
+
+%%
+
+(YEAR14)-(COUNTY14)-(NUMBER) {}
+(YEAR87)-(COUNTY87)-(NUMBER) {}
+.|\n                {}
+
+%%
+
+int main()
+{
+  return 0;
+}
