@@ -1,20 +1,28 @@
 %{
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 %}
-COUNTY14 C|CE|CN|CW|D|DL|G|KE|KK|KY|L|LD|LH|LM|LS|MH|MN|MO|OY|RN|SO|T|W|WH|WX|WW
-COUNTY87 C|CE|CN|CW|D|DL|G|KE|KK|KY|L|LK|LD|LH|LM|LS|MH|MN|MO|OY|RN|SO|TN|TS|W|WD|WH|WX|WW
-YEAR14 [0-9][0-9](1|2)
-YEAR87 [0-9][0-9]
+
+COUNTY C|CE|CN|CW|D|DL|G|KE|KK|KY|L|LK|LD|LH|LM|LS|MH|MN|MO|OY|RN|SO|T|TN|TS|W|WD|WH|WX|WW
+YEAR [0-9]{2,3}
 NUMBER [1-9][0-9]{0,5}
 
 %%
 
-(YEAR14)-(COUNTY14)-(NUMBER) {}
-(YEAR87)-(COUNTY87)-(NUMBER) {}
+{YEAR}-{COUNTY}-{NUMBER} {
+  char year[3];
+  strncpy(year, yytext, 2);
+  int yearint = atoi(year);
+  if(yearint > 21) yearint -= 100;
+  printf("%d\n",21 - yearint);
+}
 .|\n                {}
 
 %%
 
 int main()
 {
+  yylex();
   return 0;
 }
