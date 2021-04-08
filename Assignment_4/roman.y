@@ -11,8 +11,7 @@ calclist: {}
         | calclist number EOL { printf("%d\n", $2); }
         ;
 number: SYMBOL
-      | SYMBOL SYMBOL { $$ = $1 + $2; }
-      | SYMBOL SYMBOL SYMBOL { $$ = $1 + $2 + $3; }
+      | number SYMBOL { $$ = $1 + $2; }
       ;
 %%
 
