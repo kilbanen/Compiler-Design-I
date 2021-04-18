@@ -9,17 +9,23 @@ int convertToRoman (int val, char *res, size_t sz);
 
 %token I V X L C D M
 %token PLUS MINUS TIMES DIVIDE
+%token OPEN CLOSE
 %token EOL
 %%
 calclist: {}
         | calclist expression EOL { if( $2 == 0) printf("Z"); else {char* res = calloc(sizeof(char),1000); convertToRoman($2, res, 1000); printf("%s\n", res);} }
         ;
-expression: number
-          | expression PLUS expression { $$ = $1 + $3; }
-          | expression MINUS expression { $$ = $1 - $3; }
-          | expression TIMES expression { $$ = $1 * $3; }
-          | expression DIVIDE expression { if($3 != 0) $$ = $1 / $3; }
+expression: expression PLUS term { $$ = $1 + $3; }
+          | expression MINUS term { $$ = $1 - $3; }
+          | term
           ;
+term: term TIMES factor { $$ = $1 * $3; }
+    | term DIVIDE factor { $$ = $1 / $3; }
+    | factor
+    ;
+factor: OPEN expression CLOSE { $$ = $2; }
+      | number
+      ;
 is: I
   | I I { $$ = $1 + $2; }
   | I I I { $$ = $1 + $2 + $3; }
