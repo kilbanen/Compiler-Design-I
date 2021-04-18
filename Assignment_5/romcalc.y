@@ -4,7 +4,7 @@
 # include <string.h>
 int yylex();
 void yyerror(char *s);
-int convertToRoman (unsigned int val, char *res, size_t sz);
+int convertToRoman (int val, char *res, size_t sz);
 %}
 
 %token I V X L C D M
@@ -84,42 +84,47 @@ void yyerror(char *s)
   exit(0);
 }
 
-int convertToRoman (unsigned int val, char *res, size_t sz) {
-    char *huns[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
-    char *tens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
-    char *ones[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
-    int   size[] = { 0,   1,    2,     3,    2,   1,    2,     3,      4,    2};
+int convertToRoman (int val, char *res, size_t sz) {
+  char *huns[] = {"", "C", "CC", "CCC", "CD", "D", "DC", "DCC", "DCCC", "CM"};
+  char *tens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
+  char *ones[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
+  int   size[] = { 0,   1,    2,     3,    2,   1,    2,     3,      4,    2};
 
-    //  Add 'M' until we drop below 1000.
+  if(val < 0) {
+    val *= -1;
+    *res++ = '-';
+  }
 
-    while (val >= 1000) {
-        if (sz-- < 1) return 0;
-        *res++ = 'M';
-        val -= 1000;
-    }
+  //  Add 'M' until we drop below 1000.
 
-    // Add each of the correct elements, adjusting as we go.
+  while (val >= 1000) {
+    if (sz-- < 1) return 0;
+    *res++ = 'M';
+    val -= 1000;
+  }
 
-    if (sz < size[val/100]) return 0;
-    sz -= size[val/100];
-    strcpy (res, huns[val/100]);
-    res += size[val/100];
-    val = val % 100;
+  // Add each of the correct elements, adjusting as we go.
 
-    if (sz < size[val/10]) return 0;
-    sz -= size[val/10];
-    strcpy (res, tens[val/10]);
-    res += size[val/10];
-    val = val % 10;
+  if (sz < size[val/100]) return 0;
+  sz -= size[val/100];
+  strcpy (res, huns[val/100]);
+  res += size[val/100];
+  val = val % 100;
 
-    if (sz < size[val]) return 0;
-    sz -= size[val];
-    strcpy (res, ones[val]);
-    res += size[val];
+  if (sz < size[val/10]) return 0;
+  sz -= size[val/10];
+  strcpy (res, tens[val/10]);
+  res += size[val/10];
+  val = val % 10;
 
-    // Finish string off.
+  if (sz < size[val]) return 0;
+  sz -= size[val];
+  strcpy (res, ones[val]);
+  res += size[val];
 
-    if (sz < 1) return 0;
-    *res = '\0';
-    return 1;
+  // Finish string off.
+
+  if (sz < 1) return 0;
+  *res = '\0';
+  return 1;
 }
